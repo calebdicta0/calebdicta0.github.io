@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuaderno de notas</title>
+    <style>
+        :root {
+            --color-primario: #ff6b8b;
+            --color-secundario: #ff8e9e;
+            --color-fondo: blak;
+            --color-papel: #fff9fb;
+            --color-borde: #ffd6e0;
+            --color-texto: #5a3d4a;
+            --color-hover: #ff8e9e;
+            --color-boton: #ff4757;
+            --color-boton-hover: #ff6b81;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--color-fondo);
+            background-image: linear-gradient(135deg, #fff0f5 0%, #ffebf3 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--color-texto);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .corazon-flotante {
+            position: absolute;
+            font-size: 24px;
+            color: var(--color-primario);
+            animation: flotar 8s linear infinite;
+            opacity: 0;
+            z-index: 0;
+        }
+        
+        @keyframes flotar {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .cuaderno {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 105, 140, 0.2);
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--color-primario);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--color-primario), var(--color-secundario));
+            border-radius: 3px;
+        }
+        
+        .pagina {
+            width: 100%;
+            height: 60vh;
+            min-height: 300px;
+            padding: 20px;
+            font-size: 16px;
+            border: 1px solid var(--color-borde);
+            border-radius: 10px;
+            resize: none;
+            outline: none;
+            margin-bottom: 20px;
+            background-color: var(--color-papel);
+            line-height: 1.6;
+            box-shadow: inset 0 1px 5px rgba(255, 105, 140, 0.1);
+            transition: all 0.3s ease;
+            font-family: 'Arial', sans-serif;
+            color: var(--color-texto);
+        }
+        
+        .pagina:focus {
+            border-color: var(--color-primario);
+            box-shadow: inset 0 1px 5px rgba(255, 105, 140, 0.2), 0 0 0 2px rgba(255, 107, 139, 0.2);
+        }
+        
+        .controles {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .boton {
+            padding: 12px 20px;
+            background-color: var(--color-boton);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .boton:hover {
+            background-color: var(--color-boton-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
+        }
+        
+        .boton:disabled {
+            background-color: #ffb8c6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .boton2 {
+            padding: 8px 15px;
+            background-color: var(--color-primario);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(255, 107, 139, 0.2);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .boton2:hover {
+            background-color: var(--color-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
+        }
+        
+        .numero-pagina {
+            font-weight: bold;
+            color: var(--color-primario);
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        
+        /* Panel de Ajustes */
+        .panel-ajustes {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .contenido-modal {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            position: relative;
+            animation: modalEntrada 0.5s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes modalEntrada {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .boton-cerrar {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-primario);
+            padding: 5px;
+            transition: transform 0.2s;
+        }
+        
+        .boton-cerrar:hover {
+            transform: rotate(90deg);
+        }
+        
+        .panel-ajustes h2 {
+            margin-bottom: 20px;
+            color: var(--color-primario);
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        /* Subpanel para ajustar páginas */
+        .subpanel {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff9fb;
+            border-radius: 10px;
+            border: 1px solid var(--color-borde);
+        }
+        
+        .subpanel label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--color-texto);
+        }
+        
+        .subpanel input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-borde);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .subpanel input:focus {
+            border-color: var(--color-primario);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 107, 139, 0.2);
+        }
+        
+        /* Diseño responsivo */
+        @media (max-width: 480px) {
+            .cuaderno {
+                padding: 20px;
+            }
+            
+            .pagina {
+                height: 55vh;
+                padding: 15px;
+            }
+            
+            .controles {
+                flex-direction: column;
+            }
+            
+            .boton {
+                width: 100%;
+            }
+            
+            .contenido-modal {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body id="fondo">
+    <!-- Corazones flotantes -->
+    <div id="corazones-container"></div>
+    
+    <div class="cuaderno">
+        <h1>Cuaderno de Notas <span style="color: var(--color-primario);">❤️</span></h1>
+        <textarea class="pagina" id="paginaActual" placeholder="Escribe aquí tus pensamientos....."></textarea>
+        <div class="controles">
+            <button class="boton" id="anterior">← Anterior</button>
+            <span class="numero-pagina">Página <span id="numeroPagina">1</span></span>
+            <button class="boton" id="siguiente">Siguiente →</button>
+            <button class="boton" id="abrirAjustes">Ajustes</button>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <a class="boton2" href="index.html">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <!-- Panel de Ajustes -->
+    <div class="panel-ajustes" id="panelAjustes">
+        <div class="contenido-modal">
+            <button class="boton-cerrar" id="cerrarAjustes">✕</button>
+            <h2>Ajustes del Diario</h2>
+            <button class="boton" id="cambiarFondo">Cambiar Fondo</button>
+            <button class="boton" id="ajustarPaginas" style="margin-top: 15px;">Ajustar N° de Páginas</button>
+            
+            <!-- Subpanel para ajustar páginas -->
+            <div class="subpanel" id="subpanelPaginas">
+                <label for="nuevasPaginas">Número de páginas:</label>
+                <input type="number" id="nuevasPaginas" min="1" max="50" value="10">
+                <button class="boton" id="guardarPaginas">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables
+        let paginaActual = 1;
+        let maxPaginas = parseInt(localStorage.getItem('maxPaginas')) || 10;
+        const notas = JSON.parse(localStorage.getItem('cuadernoNotas')) || {};
+        const fondo = localStorage.getItem('fondo') || '';
+        
+        // Crear corazones flotantes
+        function crearCorazones() {
+            const container = document.getElementById('corazones-container');
+            const corazones = ['❤️', '💖', '💗', '💓', '💘'];
+            
+            for (let i = 0; i < 15; i++) {
+                const corazon = document.createElement('div');
+                corazon.className = 'corazon-flotante';
+                corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
+                corazon.style.left = `${Math.random() * 100}%`;
+                corazon.style.animationDuration = `${5 + Math.random() * 10}s`;
+                corazon.style.animationDelay = `${Math.random() * 5}s`;
+                corazon.style.fontSize = `${20 + Math.random() * 20}px`;
+                container.appendChild(corazon);
+            }
+        }
+        
+        // Elementos del DOM
+        const elementos = {
+            textarea: document.getElementById('paginaActual'),
+            btnAnterior: document.getElementById('anterior'),
+            btnSiguiente: document.getElementById('siguiente'),
+            numeroPagina: document.getElementById('numeroPagina'),
+            btnAbrirAjustes: document.getElementById('abrirAjustes'),
+            panelAjustes: document.getElementById('panelAjustes'),
+            btnCerrarAjustes: document.getElementById('cerrarAjustes'),
+            btnCambiarFondo: document.getElementById('cambiarFondo'),
+            btnAjustarPaginas: document.getElementById('ajustarPaginas'),
+            subpanelPaginas: document.getElementById('subpanelPaginas'),
+            inputPaginas: document.getElementById('nuevasPaginas'),
+            btnGuardarPaginas: document.getElementById('guardarPaginas'),
+            body: document.getElementById('fondo')
+        };
+
+        // Aplicar fondo guardado
+        if (fondo) {
+            elementos.body.style.backgroundImage = `url(${fondo})`;
+        } else {
+            // Fondo romántico por defecto
+            elementos.body.style.backgroundImage = 'linear-gradient(135deg, #fff0f5 0%, #ffebf3 100%)';
+        }
+        
+        // Crear corazones al cargar
+        crearCorazones();
+
+        // Cargar página al inicio
+        cargarPagina(paginaActual);
+
+        // Eventos
+        elementos.textarea.addEventListener('input', guardarPagina);
+
+        elementos.btnAnterior.addEventListener('click', () => {
+            if (paginaActual > 1) {
+                paginaActual--;
+                cargarPagina(paginaActual);
+            }
+        });
+
+        elementos.btnSiguiente.addEventListener('click', () => {
+            if (paginaActual < maxPaginas) {
+                paginaActual++;
+                cargarPagina(paginaActual);
+            }
+        });
+
+        elementos.btnAbrirAjustes.addEventListener('click', () => {
+            elementos.panelAjustes.style.display = 'flex';
+        });
+
+        elementos.btnCerrarAjustes.addEventListener('click', () => {
+            elementos.panelAjustes.style.display = 'none';
+            elementos.subpanelPaginas.style.display = 'none';
+        });
+
+        elementos.btnCambiarFondo.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const url = event.target.result;
+                    elementos.body.style.backgroundImage = `url(${url})`;
+                    localStorage.setItem('fondo', url);
+                };
+                reader.readAsDataURL(file);
+            };
+            
+            input.click();
+        });
+
+        elementos.btnAjustarPaginas.addEventListener('click', () => {
+            elementos.subpanelPaginas.style.display = 'block';
+            elementos.inputPaginas.value = maxPaginas;
+        });
+
+        elementos.btnGuardarPaginas.addEventListener('click', () => {
+            const nuevoMax = parseInt(elementos.inputPaginas.value);
+            if (isNaN(nuevoMax) || nuevoMax < 1) {
+                alert('Por favor ingresa un número válido');
+                return;
+            }
+            
+            maxPaginas = nuevoMax;
+            localStorage.setItem('maxPaginas', maxPaginas.toString());
+            elementos.subpanelPaginas.style.display = 'none';
+            
+            if (paginaActual > maxPaginas) {
+                paginaActual = maxPaginas;
+                cargarPagina(paginaActual);
+            }
+            
+            elementos.btnSiguiente.disabled = (paginaActual === maxPaginas);
+        });
+
+        // Funciones
+        function cargarPagina(numero) {
+            elementos.textarea.value = notas[numero] || '';
+            elementos.numeroPagina.textContent = numero;
+            elementos.btnAnterior.disabled = (numero === 1);
+            elementos.btnSiguiente.disabled = (numero === maxPaginas);
+            
+            // Auto-enfocar el textarea
+            elementos.textarea.focus();
+            
+            // Efecto de latido al cambiar página
+            elementos.numeroPagina.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                elementos.numeroPagina.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function guardarPagina() {
+            notas[paginaActual] = elementos.textarea.value;
+            localStorage.setItem('cuadernoNotas', JSON.stringify(notas));
+            
+            // Pequeño efecto visual al guardar
+            elementos.textarea.style.boxShadow = '0 0 0 2px rgba(255, 107, 139, 0.5)';
+            setTimeout(() => {
+                elementos.textarea.style.boxShadow = 'inset 0 1px 5px rgba(255, 105, 140, 0.1)';
+            }, 300);
+        }
+        
+        // Manejar el teclado para navegación rápida
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'ArrowLeft') {
+                elementos.btnAnterior.click();
+                e.preventDefault();
+            } else if (e.ctrlKey && e.key === 'ArrowRight') {
+                elementos.btnSiguiente.click();
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
