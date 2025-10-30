@@ -3,10 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios de Programaci�n Web</title>
+    <title>Servicios de Programación Web</title>
+    <style>
+    /* ===== RESET Y ESTILOS BASE ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary: #1a365d;
+        --secondary: #2d3748;
+        --accent: #2b6cb0;
+        --accent-light: #4299e1;
+        --light: #edf2f7;
+        --dark: #1a202c;
+        --success: #38a169;
+        --warning: #d69e2e;
+        --radius: 12px;
+        --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        color: var(--light);
+        line-height: 1.6;
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL ===== */
+    .container {
+        max-width: 1200px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 40px;
+        margin: 20px auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+    }
+
+    /* ===== ANIMACIÓN DEL TÍTULO ===== */
+    h1 {
+        text-align: center;
+        color: white;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 30px;
+        position: relative;
+        padding-bottom: 20px;
+        font-weight: 700;
+        letter-spacing: 1px;
+
+        /* Animación de entrada */
+        animation: tituloEntrada 1.2s ease-out;
+    }
+
+    /* Efecto de subrayado animado para h1 */
+    h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        border-radius: 2px;
+
+        /* Animación del subrayado */
+        animation: subrayadoCrece 2.5s ease-in-out infinite alternate;
+    }
+
+    /* Keyframes para la animación del título */
+    @keyframes tituloEntrada {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.9);
+        }
+        60% {
+            transform: translateY(10px) scale(1.02);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Keyframes para la animación del subrayado */
+    @keyframes subrayadoCrece {
+        0% {
+            width: 80px;
+            opacity: 0.7;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+        100% {
+            width: 200px;
+            opacity: 1;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent));
+        }
+    }
+
+    /* ===== DESCRIPCIÓN ===== */
+    .descripcion {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        color: var(--light);
+        margin-bottom: 40px;
+        text-align: center;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.8;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        border-left: 4px solid var(--accent);
+    }
+
+    /* ===== LISTA DE SERVICIOS ===== */
+    .servicios {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+
+    .servicio {
+        background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+        border-radius: var(--radius);
+        padding: 30px 25px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        animation: cardEntrada 0.8s ease-out both;
+    }
+
+    .servicio:nth-child(1) { animation-delay: 0.2s; }
+    .servicio:nth-child(2) { animation-delay: 0.4s; }
+    .servicio:nth-child(3) { animation-delay: 0.6s; }
+    .servicio:nth-child(4) { animation-delay: 0.8s; }
+
+    .servicio::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    }
+
+    .servicio:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .servicio p {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Animación de entrada para las tarjetas */
+    @keyframes cardEntrada {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ===== BOTÓN DE CONTACTO ===== */
+    .contacto {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .btn-contacto {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.2rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+        border: none;
+        cursor: pointer;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-contacto:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-contacto:active {
+        transform: translateY(0);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+        text-align: center;
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        width: 100%;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+
+        .container {
+            padding: 30px 20px;
+        }
+
+        .servicios {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .servicio {
+            padding: 25px 20px;
+        }
+
+        .btn-contacto {
+            padding: 14px 35px;
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 20px 15px;
+            margin: 10px auto;
+        }
+
+        .descripcion {
+            padding: 15px;
+        }
+
+        .servicio {
+            padding: 20px 15px;
+        }
+
+        .servicio p {
+            font-size: 1.1rem;
+        }
+
+        .btn-contacto {
+            padding: 12px 30px;
+            font-size: 1rem;
+            width: 100%;
+        }
+    }
+
+    /* Efecto de partículas en el fondo */
+    .particulas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .particula {
+        position: absolute;
+        background: rgba(66, 153, 225, 0.3);
+        border-radius: 50%;
+        animation: flotar 15s infinite linear;
+    }
+
+    @keyframes flotar {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-1000%) rotate(720deg);
+            opacity: 0;
+        }
+    }
+  </style>
 </head>
 <body>
      <h1>Numero telefonico #50815603</h1>
      <h2>Estoy en Facebook me poedes escontrar como</h2>
 </body>
 </html>
+
